@@ -8,3 +8,8 @@ Users can:
 
 *So i did not have any idea for auto date and time adjustment as i am still new to coding. So i used java to help me with it.
 i used HTML CSS and JAVA*
+
+
+
+
+[![Athena Award Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Faward.athena.hackclub.com%2Fapi%2Fbadge)](https://award.athena.hackclub.com?utm_source=readme)
