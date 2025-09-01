@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blogind</title>
+  <style>
+    body {
+      background-color: #f8f5e1;
+      font-family: "Times New Roman", serif;
+      color: #3b2f2f;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      font-family: "Burgues", cursive;
+      text-align: center;
+      font-size: 42px;
+      color: olive;
+      letter-spacing: 10px;
+      margin: 25px 0;
+      text-decoration: underline;
+    }
+    .wrap {
+      width: 80%;
+      margin: auto;
+      background: #faf8e6;
+      padding: 25px;
+      border: 12px solid olive;
+      border-radius: 50px;
+      box-shadow: 0 0 40px rgba(128,128,0,0.3);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-size: 18px;
+      color: maroon;
+      font-weight: bold;
+    }
+    textarea {
+      width: 100%;
+      min-height: 160px;
+      margin-top: 8px;
+      border: 3px solid olive;
+      border-radius: 20px;
+      padding: 10px;
+      font-size: 16px;
+      background: #fefdf6;
+    }
+    select {
+      margin: 5px;
+      padding: 8px;
+      border: 3px solid olive;
+      border-radius: 12px;
+      font-size: 15px;
+      background: #fdf5e6;
+    }
+    button {
+      margin-top: 15px;
+      padding: 12px 25px;
+      background: olive;
+      color: white;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #556b2f;
+    }
+    .history {
+      margin-top: 30px;
+      padding: 20px;
+      border: 3px dashed olive;
+      border-radius: 35px;
+      background: #fff9e8;
+    }
+    .history h2 {
+      font-family: "Burgues", cursive;
+      color: olive;
+      letter-spacing: 6px;
+      font-size: 28px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .blog-entry {
+      border: 2px solid olive;
+      border-radius: 25px;
+      margin-bottom: 15px;
+      padding: 12px;
+      background: #fdfbe7;
+    }
+    .blog-date {
+      color: olive;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .quotes {
+      text-align: right;
+      font-style: italic;
+      margin-top: 35px;
+      color: #4b3d3d;
+      border-top: 2px solid olive;
+      padding-top: 15px;
+    }
+    .footer {
+      text-align: center;
+      margin: 30px 0 10px;
+      color: olive;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>BLOGIND</h1>
+  <div class="wrap">
+    <form id="blogForm">
+      <label>Pick a date:</label>
+      <select id="day">
+        <option value="">Day</option>
+        <script>
+          for (let d = 1; d <= 31; d++) {
+            document.write(`<option>${d}</option>`)
+          }
+        </script>
+      </select>
+      <select id="month">
+        <option value="">Month</option>
+        <option>January</option><option>February</option><option>March</option>
+        <option>April</option><option>May</option><option>June</option>
+        <option>July</option><option>August</option><option>September</option>
+        <option>October</option><option>November</option><option>December</option>
+      </select>
+      <select id="year">
+        <option value="">Year</option>
+        <script>
+          for (let y = 2025; y <= 2030; y++) {
+            document.write(`<option>${y}</option>`)
+          }
+        </script>
+      </select>
+
+      <label>Write your blog:</label>
+      <textarea id="blogText" placeholder="Write your thoughts..."></textarea>
+
+      <label>Your To-Do List:</label>
+      <textarea id="todoText" placeholder="Things I need to do..."></textarea>
+
+      <button type="submit">Save Blog</button>
+    </form>
+
+    <div class="history">
+      <h2>Stored Blogs</h2>
+      <div id="blogHistory"></div>
+    </div>
+
+    <div class="quotes">
+      <p>"The best way to predict the future is to create it." – Abraham Lincoln</p>
+      <p>"Happiness is not something ready made. It comes from your own actions." – Dalai Lama</p>
+      <p>"Turn your wounds into wisdom." – Oprah Winfrey</p>
+      <p>"Do what you can, with what you have, where you are." – Theodore Roosevelt</p>
+    </div>
+  </div>
+
+  <div class="footer">Made by Sri 2025</div>
+
+  <script>
+    function loadBlogs() {
+      let blogs = JSON.parse(localStorage.getItem("blogs")) || []
+      let historyDiv = document.getElementById("blogHistory")
+      historyDiv.innerHTML = ""
+      blogs.forEach(b => {
+        let entry = document.createElement("div")
+        entry.className = "blog-entry"
+        entry.innerHTML = `<div class="blog-date">${b.date}</div>
+                           <div>${b.text}</div>
+                           <div><em>To-Do:</em> ${b.todo}</div>`
+        historyDiv.appendChild(entry)
+      })
+    }
+
+    document.getElementById("blogForm").addEventListener("submit", function(e) {
+      e.preventDefault()
+      let day = document.getElementById("day").value
+      let month = document.getElementById("month").value
+      let year = document.getElementById("year").value
+      let blogText = document.getElementById("blogText").value.trim()
+      let todoText = document.getElementById("todoText").value.trim()
+      if (blogText === "") {
+        alert("Don’t leave it empty.")
+        return
+      }
+      let date = `${day} ${month} ${year}`
+      let blog = { date: date, text: blogText, todo: todoText }
+      let blogs = JSON.parse(localStorage.getItem("blogs")) || []
+      blogs.unshift(blog)
+      localStorage.setItem("blogs", JSON.stringify(blogs))
+      document.getElementById("blogForm").reset()
+      loadBlogs()
+    })
+
+    loadBlogs()
+  </script>
+</body>
+</html>
